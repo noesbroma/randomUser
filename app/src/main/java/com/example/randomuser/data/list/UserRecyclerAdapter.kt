@@ -10,6 +10,7 @@ import com.example.randomuser.domain.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_item_row.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class UsersRecyclerAdapter(
@@ -36,6 +37,12 @@ class UsersRecyclerAdapter(
 
     fun getItemName(position: Int): String? {
         return String.format("%s %s", users?.get(position).name.first, users?.get(position).name.last)
+    }
+
+
+    fun addItems(users: ArrayList<User>) {
+        this.users.addAll(users)
+        notifyDataSetChanged()
     }
 
 

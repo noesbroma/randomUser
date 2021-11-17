@@ -11,13 +11,29 @@ import kotlinx.coroutines.launch
 
 class ListViewModel(private val repository: UserRandomRepository): ViewModel() {
     val onLoadUsersEvent = MutableLiveData<ArrayList<User>>()
+    val onLoadMoreEvent = MutableLiveData<ArrayList<User>>()
+    val results = "10"
 
 
-    fun getUsers() {
+    fun getUsers(page: Int) {
         viewModelScope.launch {
-            when (val result = repository.getUsers("40")) {
+            when (val result = repository.getUsers(page.toString(), results)) {
                 is GetUsersResult.Ok -> {
                     onLoadUsersEvent.value = result.getUsersResponse.results.distinctBy { it.name } as ArrayList<User>
+                }
+
+                is GetUsersResult.Error -> {
+                }
+            }
+        }
+    }
+
+
+    fun loadMore(page: Int) {
+        viewModelScope.launch {
+            when (val result = repository.getUsers(page.toString(), results)) {
+                is GetUsersResult.Ok -> {
+                    onLoadMoreEvent.value = result.getUsersResponse.results.distinctBy { it.name } as ArrayList<User>
                 }
 
                 is GetUsersResult.Error -> {

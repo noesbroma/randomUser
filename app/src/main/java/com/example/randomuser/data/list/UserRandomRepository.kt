@@ -4,10 +4,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserRandomRepository(val userRandomApiService: UserRandomApiService) {
-    suspend fun getUsers(results: String): GetUsersResult {
+    suspend fun getUsers(page: String, results: String): GetUsersResult {
         return withContext(Dispatchers.IO) {
             try {
-                val response = userRandomApiService.getUsers(results)
+                val response = userRandomApiService.getUsers(page, results)
 
                 if (response != null) {
                     GetUsersResult.Ok(response)
