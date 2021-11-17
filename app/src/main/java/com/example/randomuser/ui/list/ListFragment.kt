@@ -71,11 +71,11 @@ class ListFragment : Fragment() {
                 usersRecyclerAdapter?.setOnItemClickListener(object :
                     UsersRecyclerAdapter.ClickListener {
                     override fun onItemClick(v: View, position: Int) {
-                        /*(activity as MainActivity).openFragment(
+                        (activity as MainActivity).openFragment(
                             DetailFragment.newInstance(
-                                usersList[position], viewModel.users
+                                usersList[position]
                             )
-                        )*/
+                        )
                     }
                 })
 
