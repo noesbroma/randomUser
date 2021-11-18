@@ -51,6 +51,11 @@ class UsersRecyclerAdapter(
     }
 
 
+    /*fun setOnTrashClickListener(clickListener: ClickListener) {
+        this.clickListener = clickListener
+    }*/
+
+
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         val data = users?.get(position)
         data?.let { holder.bindItems(it, position) }
@@ -79,17 +84,23 @@ class UsersRecyclerAdapter(
                     .into(itemView.photo)
             } else {
             }
+
+            itemView.trash.setOnClickListener(View.OnClickListener {
+                //toggleFavorite(job.id, context)
+                clickListener?.onTrashClick(adapterPosition)
+            })
         }
 
 
         override fun onClick(v: View?) {
             if (v != null) {
-                clickListener?.onItemClick(v,adapterPosition)
+                clickListener?.onItemClick(v, adapterPosition)
             }
         }
     }
 
     interface ClickListener {
         fun onItemClick(v: View, position: Int)
+        fun onTrashClick(position: Int)
     }
 }

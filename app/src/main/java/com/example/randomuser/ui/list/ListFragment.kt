@@ -77,6 +77,10 @@ class ListFragment : Fragment() {
                             )
                         )
                     }
+
+                    override fun onTrashClick(position: Int) {
+                        viewModel.deleteUser()
+                    }
                 })
 
                 if (usersList.size > 0) {
