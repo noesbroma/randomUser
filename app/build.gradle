@@ -5,6 +5,7 @@ plugins {
 }
 
 apply plugin: 'com.google.protobuf'
+apply plugin: 'kotlin-kapt'
 
 repositories {
     jcenter()
@@ -111,8 +112,14 @@ dependencies {
     //implementation "androidx.datastore:datastore-preferences:1.0.0-rc02"
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha01"
     implementation "androidx.datastore:datastore-core:1.0.0-alpha01"
+    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    implementation "com.google.code.gson:gson:2.8.0"
 }

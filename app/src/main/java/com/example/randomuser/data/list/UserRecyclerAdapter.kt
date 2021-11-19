@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.randomuser.R
+import com.example.randomuser.data.room.UserRoom
 import com.example.randomuser.domain.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_item_row.view.*
@@ -15,7 +16,7 @@ import kotlin.collections.ArrayList
 
 class UsersRecyclerAdapter(
         private val context: Context,
-        var users: ArrayList<User>
+        var users: ArrayList<UserRoom>
 ): RecyclerView.Adapter<UsersRecyclerAdapter.UserHolder>(){
 
 
@@ -40,7 +41,7 @@ class UsersRecyclerAdapter(
     }
 
 
-    fun addItems(users: ArrayList<User>) {
+    fun addItems(users: ArrayList<UserRoom>) {
         this.users.addAll(users)
         notifyDataSetChanged()
     }
@@ -71,7 +72,7 @@ class UsersRecyclerAdapter(
         }
 
 
-        fun bindItems(user: User, position: Int) {
+        fun bindItems(user: UserRoom, position: Int) {
             itemView.name.text = getItemName(position)
             itemView.email.text = user.email
             itemView.phone.text = user.phone
@@ -87,7 +88,6 @@ class UsersRecyclerAdapter(
             }
 
             itemView.trash.setOnClickListener(View.OnClickListener {
-                //toggleFavorite(job.id, context)
                 clickListener?.onTrashClick(position)
             })
         }

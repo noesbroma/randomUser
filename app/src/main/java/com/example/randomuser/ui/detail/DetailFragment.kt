@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.randomuser.R
 import com.example.randomuser.data.list.UsersRecyclerAdapter
+import com.example.randomuser.data.room.UserRoom
 import com.example.randomuser.domain.User
 import com.example.randomuser.ui.MainActivity
 import com.example.randomuser.ui.detail.DetailViewModel
@@ -67,11 +68,11 @@ class DetailFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(user: User): DetailFragment {
+        fun newInstance(user: UserRoom): DetailFragment {
             val fragment = DetailFragment()
 
             val args = Bundle()
-            args.putSerializable("EXTRA_USER", user)
+            //args.putSerializable("EXTRA_USER", user)
             fragment.arguments = args
 
             return fragment
