@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val listModule = module {
     viewModel {
-        ListViewModel(get())
+        ListViewModel(get(), get())
     }
 
     factory { UserRandomRepository(userRandomApiService = get()) }

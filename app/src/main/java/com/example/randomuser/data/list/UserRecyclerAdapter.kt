@@ -46,14 +46,15 @@ class UsersRecyclerAdapter(
     }
 
 
-    fun setOnItemClickListener(clickListener: ClickListener) {
-        this.clickListener = clickListener
+    fun deleteItem(position: Int) {
+        this.users.removeAt(position)
+        notifyDataSetChanged()
     }
 
 
-    /*fun setOnTrashClickListener(clickListener: ClickListener) {
+    fun setOnItemClickListener(clickListener: ClickListener) {
         this.clickListener = clickListener
-    }*/
+    }
 
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
@@ -87,7 +88,7 @@ class UsersRecyclerAdapter(
 
             itemView.trash.setOnClickListener(View.OnClickListener {
                 //toggleFavorite(job.id, context)
-                clickListener?.onTrashClick(adapterPosition)
+                clickListener?.onTrashClick(position)
             })
         }
 
