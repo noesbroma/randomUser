@@ -1,27 +1,20 @@
 package com.example.randomuser.ui.list
 
-//import BookmarkDataStore
-import UserPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.randomuser.R
 import com.example.randomuser.data.list.UsersRecyclerAdapter
-import com.example.randomuser.domain.User
 import com.example.randomuser.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.FieldPosition
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.example.randomuser.data.room.*
+import com.example.randomuser.data.room.UserRoom
+import com.example.randomuser.domain.*
 
 
 class ListFragment : Fragment() {
@@ -30,9 +23,6 @@ class ListFragment : Fragment() {
     private var usersList: ArrayList<UserRoom> = ArrayList()
     private var page = 1
     private var usersRecyclerAdapter: UsersRecyclerAdapter? = null
-    //lateinit var dataStoreManager: DataStoreManager
-    //private lateinit var userPreferences: UserPreferences
-    //private lateinit var preferencesDataStore: BookmarkDataStore
 
 
     override fun onCreateView(
@@ -43,19 +33,10 @@ class ListFragment : Fragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //userPreferences = UserPreferences(requireContext())
-        //preferencesDataStore = PreferencesDataStore(requireContext())
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fetchRandomQuote()
-        //viewModel.getUsers(page)
 
         observeViewModel()
     }
@@ -97,16 +78,24 @@ class ListFragment : Fragment() {
                     usersRecyclerAdapter?.setOnItemClickListener(object :
                         UsersRecyclerAdapter.ClickListener {
                         override fun onItemClick(v: View, position: Int) {
+                            val userRoom = usersList[position]
+                            var user = User(userRoom.gender, Name(userRoom.name.title, userRoom.name.first, userRoom.name.last), userRoom.email, userRoom.phone, Picture(userRoom.picture.large, userRoom.picture.medium, userRoom.picture.thumbnail), Location(
+                                Street(userRoom.location.street.name, userRoom.location.street.number), userRoom.location.city, userRoom.location.state), Registered(userRoom.registered.date, userRoom.registered.age)
+                            )
+
                             (activity as MainActivity).openFragment(
                                 DetailFragment.newInstance(
-                                    usersList[position]
+                                    user
                                 )
                             )
                         }
 
                         override fun onTrashClick(position: Int) {
-                            /*viewModel.setDeleted(usersList[position].phone)
-                            usersRecyclerAdapter?.deleteItem(position)*/
+                            var user = usersList[position]
+
+                            viewModel.updateUser(user)
+
+                            usersRecyclerAdapter?.deleteItem(position)
                         }
                     })
 
@@ -156,20 +145,22 @@ class ListFragment : Fragment() {
                 usersRecyclerAdapter?.setOnItemClickListener(object :
                     UsersRecyclerAdapter.ClickListener {
                     override fun onItemClick(v: View, position: Int) {
+                        val userRoom = usersList[position]
+                        var user = User(userRoom.gender, Name(userRoom.name.title, userRoom.name.first, userRoom.name.last), userRoom.email, userRoom.phone, Picture(userRoom.picture.large, userRoom.picture.medium, userRoom.picture.thumbnail), Location(
+                            Street(userRoom.location.street.name, userRoom.location.street.number), userRoom.location.city, userRoom.location.state), Registered(userRoom.registered.date, userRoom.registered.age)
+                        )
+
                         (activity as MainActivity).openFragment(
                             DetailFragment.newInstance(
-                                usersList[position]
+                                user
                             )
                         )
                     }
 
                     override fun onTrashClick(position: Int) {
-                        /*viewModel.setDeleted(usersList[position].phone)*/
                         var user = usersList[position]
-                        var userRoom = UserRoom(user.gender, Name(user.name.first, user.name.last), user.email, user.phone, Picture(user.picture.large, user.picture.medium, user.picture.thumbnail), Location(
-                        Street(user.location.street.name, user.location.street.number), user.location.city, user.location.state), Registered(user.registered.date.toString(), user.registered.age))
 
-                        viewModel.updateUser(userRoom)
+                        viewModel.updateUser(user)
 
                         usersRecyclerAdapter?.deleteItem(position)
                     }

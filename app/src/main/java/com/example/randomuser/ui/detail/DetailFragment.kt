@@ -68,11 +68,11 @@ class DetailFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(user: UserRoom): DetailFragment {
+        fun newInstance(user: User): DetailFragment {
             val fragment = DetailFragment()
 
             val args = Bundle()
-            //args.putSerializable("EXTRA_USER", user)
+            args.putSerializable("EXTRA_USER", user)
             fragment.arguments = args
 
             return fragment

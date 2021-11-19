@@ -43,6 +43,6 @@ data class Street (
 
 
 data class Registered (
-    @SerializedName("date") val date: Date,
+    @SerializedName("date") val date: String,
     @SerializedName("age") val age: String
 ): Serializable
