@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.user_item_row.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.LocalDate
 
 
 class DetailFragment : Fragment() {
@@ -44,10 +45,10 @@ class DetailFragment : Fragment() {
 
 
     private fun setUI() {
-        gender.text = viewModel.user.gender
+        gender.text = viewModel.user.gender.capitalize()
         name.text = String.format("%s %s", viewModel.user.name.first, viewModel.user.name.last)
         location.text = String.format("%s %s, %s, %s", viewModel.user.location.street.name, viewModel.user.location.street.number, viewModel.user.location.city, viewModel.user.location.state)
-        registeredDate.text = viewModel.user.registered.date.toString()
+        registeredDate.text = viewModel.user.registered.date
         email.text = viewModel.user .email
 
         val url = viewModel.user.picture.large

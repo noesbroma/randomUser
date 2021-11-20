@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
 
     fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.slide_in_right,
+            R.anim.slide_out_left,
+            R.anim.pop_enter,
+            R.anim.pop_exit)
         transaction.replace(R.id.container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
