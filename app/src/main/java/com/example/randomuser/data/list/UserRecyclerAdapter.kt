@@ -45,6 +45,12 @@ class UsersRecyclerAdapter(var users: ArrayList<UserRoom>
     }
 
 
+    fun reloadItems(users: ArrayList<UserRoom>) {
+        this.users = users
+        notifyDataSetChanged()
+    }
+
+
     fun deleteItem(position: Int) {
         this.users.removeAt(position)
         notifyDataSetChanged()

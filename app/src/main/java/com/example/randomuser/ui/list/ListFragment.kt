@@ -1,6 +1,9 @@
 package com.example.randomuser.ui.list
 
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.randomuser.data.room.UserRoom
 import com.example.randomuser.domain.*
+import kotlinx.android.synthetic.main.search_header_layout.*
 
 
 class ListFragment : Fragment() {
@@ -36,17 +40,18 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchRandomQuote()
+        viewModel.getUsersFromDB()
 
         observeViewModel()
+        setListeners()
     }
 
 
     private fun observeViewModel() {
-        viewModel.liveQuote.observe(
+        viewModel.onLoadUsersEvent.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { usersRoom ->
-                if(usersRoom.size > 1) {
+            androidx.lifecycle.Observer { users ->
+                if(users.size > 1) {
                     progressBar.visibility = View.GONE
 
                     linearLayoutManager = LinearLayoutManager(context)
@@ -59,7 +64,7 @@ class ListFragment : Fragment() {
                         )
                     )
 
-                    usersList = usersRoom as ArrayList<UserRoom>
+                    usersList = users
 
                     usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(usersList) }
 
@@ -67,7 +72,7 @@ class ListFragment : Fragment() {
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
                         {
                             super.onScrolled(recyclerView, dx, dy)
-                            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == page * 10 - 1)
+                            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == viewModel.usersRoom.size - 1)
                             {
                                 page ++
                                 viewModel.loadMore(page)
@@ -93,7 +98,7 @@ class ListFragment : Fragment() {
                         override fun onTrashClick(position: Int) {
                             var user = usersList[position]
 
-                            viewModel.updateUser(user)
+                            viewModel.deleteUser(user)
 
                             usersRecyclerAdapter?.deleteItem(position)
                         }
@@ -106,71 +111,7 @@ class ListFragment : Fragment() {
                         //noResults.visibility = View.VISIBLE
                     }
                 } else {
-                    viewModel.getUsers(page)
-                }
-            }
-        )
-
-        viewModel.onLoadUsersEvent.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { users ->
-                progressBar.visibility = View.GONE
-
-                linearLayoutManager = LinearLayoutManager(context)
-                usersRecycler.layoutManager = linearLayoutManager
-                usersRecycler.hasFixedSize()
-                usersRecycler.addItemDecoration(
-                    DividerItemDecoration(
-                        context,
-                        DividerItemDecoration.VERTICAL
-                    )
-                )
-
-                usersList = users
-
-                usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(usersList) }
-
-                usersRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
-                    {
-                        super.onScrolled(recyclerView, dx, dy)
-                            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == page * 10 - 1)
-                            {
-                                page ++
-                                viewModel.loadMore(page)
-                            }
-                    }
-                })
-
-                usersRecyclerAdapter?.setOnItemClickListener(object :
-                    UsersRecyclerAdapter.ClickListener {
-                    override fun onItemClick(v: View, position: Int) {
-                        val userRoom = usersList[position]
-                        var user = User(userRoom.gender, Name(userRoom.name.title, userRoom.name.first, userRoom.name.last), userRoom.email, userRoom.phone, Picture(userRoom.picture.large, userRoom.picture.medium, userRoom.picture.thumbnail), Location(
-                            Street(userRoom.location.street.name, userRoom.location.street.number), userRoom.location.city, userRoom.location.state), Registered(userRoom.registered.date, userRoom.registered.age)
-                        )
-
-                        (activity as MainActivity).openFragment(
-                            DetailFragment.newInstance(
-                                user
-                            )
-                        )
-                    }
-
-                    override fun onTrashClick(position: Int) {
-                        var user = usersList[position]
-
-                        viewModel.updateUser(user)
-
-                        usersRecyclerAdapter?.deleteItem(position)
-                    }
-                })
-
-                if (usersList.size > 0) {
-                    usersRecycler.adapter?.notifyDataSetChanged()
-                    usersRecycler.adapter = usersRecyclerAdapter
-                } else {
-                    //noResults.visibility = View.VISIBLE
+                    viewModel.getUsersFromAPI(page)
                 }
             }
         )
@@ -180,9 +121,43 @@ class ListFragment : Fragment() {
             androidx.lifecycle.Observer { users ->
                 progressBar.visibility = View.GONE
 
-                usersRecyclerAdapter?.addItems(users)
+                //usersRecyclerAdapter?.addItems(users)
+                usersRecyclerAdapter?.reloadItems(users)
             }
         )
+
+        viewModel.onFilteredUsersEvent.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { users ->
+                //progressBar.visibility = View.GONE
+
+                usersRecyclerAdapter?.reloadItems(users)
+            }
+        )
+    }
+
+
+    private fun setListeners() {
+        search_edit_text.addTextChangedListener(object : TextWatcher {
+            var timer: CountDownTimer? = null
+            override fun afterTextChanged(text: Editable) {
+                timer?.cancel()
+                timer = object : CountDownTimer(1000, 1500) {
+                    override fun onTick(millisUntilFinished: Long) {}
+                    override fun onFinish() {
+                        viewModel.filterResults(text)
+                    }
+                }.start()
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+            }
+        })
     }
 
 
