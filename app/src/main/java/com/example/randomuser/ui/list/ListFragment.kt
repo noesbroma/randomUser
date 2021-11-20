@@ -61,7 +61,7 @@ class ListFragment : Fragment() {
 
                     usersList = usersRoom as ArrayList<UserRoom>
 
-                    usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(requireContext(), usersList) }
+                    usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(usersList) }
 
                     usersRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
@@ -128,7 +128,7 @@ class ListFragment : Fragment() {
 
                 usersList = users
 
-                usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(requireContext(), usersList) }
+                usersRecyclerAdapter = context?.let { UsersRecyclerAdapter(usersList) }
 
                 usersRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)

@@ -14,9 +14,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class UsersRecyclerAdapter(
-        private val context: Context,
-        var users: ArrayList<UserRoom>
+class UsersRecyclerAdapter(var users: ArrayList<UserRoom>
 ): RecyclerView.Adapter<UsersRecyclerAdapter.UserHolder>(){
 
 
