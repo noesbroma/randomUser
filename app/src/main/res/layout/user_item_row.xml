@@ -19,7 +19,7 @@
         android:scaleType="fitCenter"
         app:shapeAppearanceOverlay="@style/circle"
         app:strokeWidth="2dp"
-        app:strokeColor="@android:color/darker_gray"
+        app:strokeColor="@color/primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

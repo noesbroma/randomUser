@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="40dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/photo"
@@ -13,7 +14,7 @@
         android:scaleType="fitCenter"
         app:shapeAppearanceOverlay="@style/circle"
         app:strokeWidth="10dp"
-        app:strokeColor="@android:color/darker_gray"
+        app:strokeColor="@color/primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -26,6 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
+        android:textColor="@color/textPrimary"
         android:textSize="30dp"/>
 
     <LinearLayout
@@ -48,7 +50,8 @@
             android:id="@+id/gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/textPrimary"/>
     </LinearLayout>
 
     <LinearLayout
@@ -65,13 +68,14 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ico_location"
-            app:tint="@color/textPrimary"/>
+            app:tint="@color/textPrimary" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/textPrimary" />
     </LinearLayout>
 
     <LinearLayout
@@ -94,7 +98,8 @@
             android:id="@+id/registeredDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/textPrimary" />
     </LinearLayout>
 
     <LinearLayout
@@ -116,6 +121,7 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/textPrimary" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
