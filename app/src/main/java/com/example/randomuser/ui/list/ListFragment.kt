@@ -95,20 +95,33 @@ class ListFragment : Fragment() {
                             )
                         }
 
-                        override fun onTrashClick(position: Int) {
-                            var user = usersList[position]
+                        override fun onTrashClick(position: Int, phone: String) {
+                            var user = usersList.find { it.phone == phone }
+                            user?.let { viewModel.deleteUser(it) }
 
-                            viewModel.deleteUser(user)
+                            var i = viewModel.usersRoom.indexOf(user)
+                            viewModel.usersRoom.removeAt(i)
 
                             usersRecyclerAdapter?.deleteItem(position)
+
+                            if (usersRecyclerAdapter?.itemCount!! > 1) {
+                                noResults.visibility = View.GONE
+                                usersRecycler.visibility = View.VISIBLE
+                            } else {
+                                noResults.visibility = View.VISIBLE
+                                usersRecycler.visibility = View.GONE
+                            }
                         }
                     })
 
                     if (usersList.size > 0) {
                         usersRecycler.adapter?.notifyDataSetChanged()
                         usersRecycler.adapter = usersRecyclerAdapter
+                        usersRecycler.visibility = View.VISIBLE
+                        noResults.visibility = View.GONE
                     } else {
-                        //noResults.visibility = View.VISIBLE
+                        noResults.visibility = View.VISIBLE
+                        usersRecycler.visibility = View.GONE
                     }
                 } else {
                     viewModel.getUsersFromAPI(page)
@@ -121,7 +134,6 @@ class ListFragment : Fragment() {
             androidx.lifecycle.Observer { users ->
                 progressBar.visibility = View.GONE
 
-                //usersRecyclerAdapter?.addItems(users)
                 usersRecyclerAdapter?.reloadItems(users)
             }
         )
@@ -129,7 +141,13 @@ class ListFragment : Fragment() {
         viewModel.onFilteredUsersEvent.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { users ->
-                //progressBar.visibility = View.GONE
+                if (users.size > 0) {
+                    usersRecycler.visibility = View.VISIBLE
+                    noResults.visibility = View.GONE
+                } else {
+                    usersRecycler.visibility = View.GONE
+                    noResults.visibility = View.VISIBLE
+                }
 
                 usersRecyclerAdapter?.reloadItems(users)
             }

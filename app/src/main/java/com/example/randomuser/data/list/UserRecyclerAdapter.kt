@@ -92,7 +92,7 @@ class UsersRecyclerAdapter(var users: ArrayList<UserRoom>
             }
 
             itemView.trash.setOnClickListener(View.OnClickListener {
-                clickListener?.onTrashClick(position)
+                clickListener?.onTrashClick(position, itemView.phone.text.toString())
             })
         }
 
@@ -106,6 +106,6 @@ class UsersRecyclerAdapter(var users: ArrayList<UserRoom>
 
     interface ClickListener {
         fun onItemClick(v: View, position: Int)
-        fun onTrashClick(position: Int)
+        fun onTrashClick(position: Int, phone: String)
     }
 }
