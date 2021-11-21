@@ -10,10 +10,11 @@ import com.example.randomuser.data.list.UserRandomRepository
 import com.example.randomuser.domain.User
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.example.randomuser.ListInterface
 import com.example.randomuser.data.room.*
 
 
-class ListViewModel(application: Application, private val repository: UserRandomRepository): AndroidViewModel(application) {
+class ListViewModel(application: Application, private val repository: UserRandomRepository): AndroidViewModel(application), ListInterface.ViewModel {
     val onLoadUsersEvent = MutableLiveData<ArrayList<UserRoom>>()
     val onLoadMoreEvent = MutableLiveData<ArrayList<UserRoom>>()
     val onFilteredUsersEvent = MutableLiveData<ArrayList<UserRoom>>()
@@ -26,7 +27,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     private val results = "10"
 
 
-    fun getUsersFromDB() {
+    override fun getUsersFromDB() {
         viewModelScope.launch {
             try {
                 usersRoom = userDao.getAll() as ArrayList<UserRoom>
@@ -40,7 +41,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     }
 
 
-    fun getUsersFromAPI(page: Int) {
+    override fun getUsersFromAPI(page: Int) {
         viewModelScope.launch {
             when (val result = repository.getUsers(page.toString(), results)) {
                 is GetUsersResult.Ok -> {
@@ -56,7 +57,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     }
 
 
-    fun insertUsersToDB(users: ArrayList<User>, loadMore: Boolean) {
+    override fun insertUsersToDB(users: ArrayList<User>, loadMore: Boolean) {
         users.forEach {
             var r = UserRoom(it.gender, Name(it.name.title, it.name.first, it.name.last), it.email, it.phone, Picture(it.picture.large, it.picture.medium, it.picture.thumbnail), Location(
                 Street(it.location.street.name, it.location.street.number), it.location.city, it.location.state), Registered(it.registered.date.toString(), it.registered.age))
@@ -79,7 +80,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     }
 
 
-    fun deleteUser(user: UserRoom) {
+    override fun deleteUser(user: UserRoom) {
         try {
             userDao.deleteByUserEmail(user.email)
         } catch (e: Exception){
@@ -88,7 +89,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     }
 
 
-    fun loadMore(page: Int) {
+    override fun loadMore(page: Int) {
         viewModelScope.launch {
             when (val result = repository.getUsers(page.toString(), results)) {
                 is GetUsersResult.Ok -> {
@@ -104,7 +105,7 @@ class ListViewModel(application: Application, private val repository: UserRandom
     }
 
 
-    fun filterResults(text: Editable) {
+    override fun filterResults(text: Editable) {
         viewModelScope.launch {
             try {
                 if (text.toString().isEmpty()) {

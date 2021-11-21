@@ -32,7 +32,6 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let { viewModel.fetchIntentData(it) }
-        observeViewModel()
         setUI()
     }
 
@@ -60,11 +59,6 @@ class DetailFragment : Fragment() {
                 .into(photo)
         } else {
         }
-    }
-
-
-    private fun observeViewModel() {
-
     }
 
 

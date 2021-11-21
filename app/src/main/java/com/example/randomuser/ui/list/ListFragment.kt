@@ -16,12 +16,13 @@ import com.example.randomuser.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.randomuser.ListInterface
 import com.example.randomuser.data.room.UserRoom
 import com.example.randomuser.domain.*
 import kotlinx.android.synthetic.main.search_header_layout.*
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), ListInterface.View {
     private val viewModel: ListViewModel by viewModel()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var usersList: ArrayList<UserRoom> = ArrayList()
@@ -47,7 +48,7 @@ class ListFragment : Fragment() {
     }
 
 
-    private fun observeViewModel() {
+    override fun observeViewModel() {
         viewModel.onLoadUsersEvent.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { users ->
@@ -137,7 +138,7 @@ class ListFragment : Fragment() {
     }
 
 
-    private fun setListeners() {
+    override fun setListeners() {
         search_edit_text.addTextChangedListener(object : TextWatcher {
             var timer: CountDownTimer? = null
             override fun afterTextChanged(text: Editable) {
