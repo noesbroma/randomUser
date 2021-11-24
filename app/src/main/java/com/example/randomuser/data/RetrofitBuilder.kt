@@ -6,7 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitBuilder {
     companion object {
         private var retrofit_api: Retrofit? = null
-        val baseSecureHost = "https://api.randomuser.me"
+        //val baseSecureHost = "https://api.randomuser.me"
+
+        val baseSecureHost = "https://mobile.ofertia.com/api/v2/"
 
 
         fun getRetrofitApi(): Retrofit? {

@@ -18,6 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.randomuser.data.room.UserRoom
 import com.example.randomuser.domain.*
+import com.example.randomuser.ui.brouchers.SecondFragment
 import kotlinx.android.synthetic.main.search_header_layout.*
 
 
@@ -176,6 +177,12 @@ class ListFragment : Fragment() {
                                        before: Int, count: Int) {
             }
         })
+
+        SecondActivityButton.setOnClickListener(){
+            (activity as MainActivity).openFragment(
+                SecondFragment.newInstance()
+            )
+        }
     }
 
 

@@ -2,6 +2,7 @@ package com.example.randomuser.ui
 
 import android.app.Application
 import android.content.Context
+import com.example.randomuser.di.broucherModule
 import com.example.randomuser.di.detailModule
 import com.example.randomuser.di.listModule
 import okhttp3.internal.Internal
@@ -23,7 +24,8 @@ class randomUserApplication: Application() {
             modules(
                 listOf(
                     listModule,
-                    detailModule
+                    detailModule,
+                    broucherModule
                 )
             )
         }
